@@ -39,4 +39,65 @@ const verifRegister = async (req, res, next) => {
   next();
 };
 
-module.exports = { verifRegister };
+const verifLogin = async (req, res, next) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  if (!validator.isEmail(email)) {
+    return res.json({
+      message: "Votre mail n'est pas conforme voir ex : example@exemple.com",
+    });
+  }
+  if (!validator.isAlphanumeric(password)) {
+    return res.json({
+      message:
+        "Votre mot de passe ne doit contenir que des lettres et des chiffres",
+    });
+  }
+
+  req.email = email;
+  req.password = password;
+  next();
+};
+
+const verifAddEquipment = async (req, res, next) => {
+  const name = req.body.name;
+  const description = req.body.description;
+  const image = req.body.image;
+  const disponibilite = req.body.disponibilite;
+  const price = req.body.price;
+
+  //  vérification du body
+  if (!validator.isAlphanumeric(name)) {
+    return res.json({
+      message: "Le name doit contenir des lettres ou des chiffres",
+    });
+  }
+  if (!validator.isAlphanumeric(description)) {
+    return res.json({
+      message: "La description doit contenir des lettres ou des chiffres",
+    });
+  }
+  if (!validator.isURL(image)) {
+    return res.json({
+      message: "L'image doit contenir une URL d'image http://",
+    });
+  }
+  if (!validator.isBoolean(disponibilite)) {
+    return res.json({ message: "Disponibilité doit être true ou false" });
+  }
+  if (!validator.isCurrency(price)) {
+    return res.json({
+      message: "price est indiquer un prix",
+    });
+  }
+
+  req.name = name;
+  req.description = description;
+  req.image = image;
+  req.disponibilite = disponibilite;
+  req.price = price;
+  next();
+};
+
+module.exports = { verifRegister, verifAddEquipment };
