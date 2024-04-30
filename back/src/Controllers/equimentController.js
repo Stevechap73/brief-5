@@ -7,7 +7,6 @@ const uploadDirectory = path.join(__dirname, "uploads");
 // const bcrypt = require("bcrypt");
 // const jwt = require("jsonwebtoken");
 const validator = require("validator");
-const { CLIENT_RENEG_LIMIT } = require("tls");
 require("dotenv").config();
 
 app.set("views", path.join(__dirname, "views"));
@@ -90,6 +89,7 @@ const addEquiment = async (req, res) => {
 const getAllEquipment = async (req, res) => {
   try {
     const sql = `SELECT * FROM  equipment`;
+
     const [result] = await pool.query(sql);
 
     res.status(200).json({ result });

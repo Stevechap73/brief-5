@@ -80,7 +80,7 @@ async function addEquipment() {
       "http://localhost:3003/equipment/add/equipment",
       request
     ).then((res) => {
-      if (res.status === 200) {
+      if (res.status === 201) {
         alert("inserted");
       }
     });

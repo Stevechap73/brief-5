@@ -23,10 +23,11 @@ async function getAllEquipment() {
   let apiCall = await fetch("http://localhost:3003/equipment/all");
   let response = await apiCall.json();
   console.log(response);
-
+  console.log(response.result);
   response.result.forEach((equipment) => {
     let imageUrl = `../../back/src/Controllers/uploads/${equipment.image}`;
-    console.log(imageUrl);
+    // let imageUrl = `http://localhost:3003/uploads/${equipment.image}`;
+    // console.log(imageUrl);
     cards.innerHTML += `<div class="card" style="width: 18rem;">
                         <img src="${imageUrl}" class="card-img-top" alt="Image ${equipment.name}" />
                         <div class="card-body">
