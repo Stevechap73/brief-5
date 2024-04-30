@@ -1,6 +1,6 @@
 const express = require("express");
-const userRoute = require("./Controllers/Routes/user");
-const equipmentRoute = require("./Controllers/Routes/equipment");
+const userRouter = require("./Controllers/Routes/user");
+const equipmentRouter = require("./Controllers/Routes/equipment");
 const app = express();
 const cors = require("cors");
 require("dotenv").config();
@@ -8,8 +8,8 @@ require("dotenv").config();
 app.use(cors());
 app.use(express.json());
 
-app.use("/user", userRoute);
-app.use("/equipment", equipmentRoute);
+app.use("/user", userRouter);
+app.use("/equipment", equipmentRouter);
 
 app.listen(process.env.PORT, () => {
   console.log("im listening on port", process.env.PORT);

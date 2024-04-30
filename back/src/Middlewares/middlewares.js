@@ -63,7 +63,7 @@ const verifLogin = async (req, res, next) => {
 const verifAddEquipment = async (req, res, next) => {
   const name = req.body.name;
   const description = req.body.description;
-  const image = req.body.image;
+  // const image = req.body.image;
   const disponibilite = req.body.disponibilite;
   const price = req.body.price;
 
@@ -78,11 +78,11 @@ const verifAddEquipment = async (req, res, next) => {
       message: "La description doit contenir des lettres ou des chiffres",
     });
   }
-  if (!validator.isURL(image)) {
-    return res.json({
-      message: "L'image doit contenir une URL d'image http://",
-    });
-  }
+  // if (!validator.isURL(image)) {
+  //   return res.json({
+  //     message: "L'image doit contenir une URL d'image http://",
+  //   });
+  // }
   if (!validator.isBoolean(disponibilite)) {
     return res.json({ message: "Disponibilité doit être true ou false" });
   }
@@ -94,10 +94,42 @@ const verifAddEquipment = async (req, res, next) => {
 
   req.name = name;
   req.description = description;
-  req.image = image;
+  // req.image = image;
   req.disponibilite = disponibilite;
   req.price = price;
   next();
 };
 
-module.exports = { verifRegister, verifAddEquipment };
+const verifUpdate = async (req, res, next) => {
+  const id = req.params.id;
+  const { name, description, price, disponibilite } = req.body;
+  let data = [];
+  let values = [];
+  if (name) {
+    data.push("name= ?");
+    values.push(name);
+  }
+  if (description) {
+    data.push("description= ?");
+    values.push(description);
+  }
+  if (price) {
+    data.push("price= ?");
+    values.push(price);
+  }
+  if (disponibilite) {
+    data.push("disponibilite= ?");
+    values.push(disponibilite);
+  }
+  console.log(values);
+  if (data.length == 0) {
+    return res.json({ message: "vous avez modifier aucune donnée" });
+  }
+  values.push(id);
+  data = data.join(",");
+  req.data = data;
+  req.values = values;
+  next();
+};
+
+module.exports = { verifRegister, verifAddEquipment, verifUpdate };
