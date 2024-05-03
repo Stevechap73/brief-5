@@ -1,4 +1,5 @@
 const { pool } = require("../Connections/db");
+const { transporter } = require("../Utils/mailer"); // pour l'envoie de mail
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const validator = require("validator");
@@ -23,6 +24,8 @@ const register = async (req, res) => {
       const hash = await bcrypt.hash(password, 10);
       const sqlInsertRequest =
         "INSERT INTO user (email, password, role, firstName, adress) VALUES (?, ?, ?, ?, ?)";
+      // const activationToken = await bcrypt.hash(email, 10);
+
       const insertValues = [email, hash, role, firstName, adress];
       const [rows] = await pool.execute(sqlInsertRequest, insertValues);
       if (rows.affectedRows > 0) {
@@ -69,12 +72,15 @@ const login = async (req, res) => {
             {
               email: result[0].email,
               id: result[0].id,
+              role: result[0].role,
+              firstName: result[0].firstName,
+              adress: result[0].adress,
             },
             process.env.SECRET_KEY,
             { expiresIn: "20d" }
           );
           console.log();
-          res.status(200).json({ jwt: token });
+          res.status(200).json({ jwt: token, role: result[0].role });
           return;
         }
       );
@@ -85,4 +91,17 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register, login };
+const testEmail = async (req, res) => {
+  const info = await transporter.sendMail({
+    from: `${process.env.SMTP_EMAIL}`,
+    to: "steve.chapuis4@free.fr",
+    subject: "Hello ✔",
+    text: "Hello world?",
+    html: "<b>Hello world?</b>",
+  });
+
+  console.log("Message sent: %s", info.messageId);
+  res.status(200).json(`Message send with the id ${info.messageId}`);
+};
+
+module.exports = { register, login, testEmail };

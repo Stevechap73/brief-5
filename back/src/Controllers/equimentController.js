@@ -3,9 +3,9 @@ const express = require("express");
 const path = require("path");
 const multer = require("multer");
 const app = express();
-const uploadDirectory = path.join(__dirname, "uploads");
-// const bcrypt = require("bcrypt");
-// const jwt = require("jsonwebtoken");
+const uploadDirectory = path.join(__dirname, "../public/uploads");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const validator = require("validator");
 require("dotenv").config();
 
